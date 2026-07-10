@@ -29,6 +29,9 @@ class Trek(db.Model):
     available_slots = db.Column(db.Integer, nullable=False)
     assigned_staff_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     status = db.Column(db.String(50), nullable=False)
+    start_date = db.Column(db.Date, nullable=True)
+    end_date = db.Column(db.Date, nullable=True)
+    description = db.Column(db.Text, nullable=True)
 
     bookings = db.relationship('Booking', backref='trek', lazy=True)
 
