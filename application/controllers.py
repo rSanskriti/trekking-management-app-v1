@@ -58,7 +58,7 @@ def register():
             flash('Username already exists')
             return redirect(url_for('controllers.register'))
 
-        user = User(username=username, password=password, role=role)
+        user = User(username=username, password=password, role=role, contact_details=contact_details or '')
         db.session.add(user)
         db.session.commit()
 
@@ -277,13 +277,82 @@ def admin_bookings():
     return render_template('admin_bookings.html', bookings=bookings)
 
 
-# --- Placeholder role dashboards (built out fully in later milestones) ---
-
 @controllers.route('/staff/dashboard')
 def staff_dashboard():
     if session.get('role') != 'Trek Staff':
         return redirect(url_for('controllers.login'))
-    return 'Trek Staff Dashboard - coming in Milestone 4'
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
+    profile = StaffProfile.query.filter_by(user_id=user_id).first()
+    assigned_treks = Trek.query.filter_by(assigned_staff_id=user_id).all()
+
+    trek_data = []
+    total_participants = 0
+    open_treks_count = 0
+    for trek in assigned_treks:
+        participant_count = Booking.query.filter_by(trek_id=trek.id, status='Booked').count()
+        trek_data.append({'trek': trek, 'participant_count': participant_count})
+        total_participants += participant_count
+        if trek.status == 'Open':
+            open_treks_count += 1
+
+    return render_template(
+        'staff_dashboard.html',
+        user=user,
+        profile=profile,
+        trek_data=trek_data,
+        total_participants=total_participants,
+        open_treks_count=open_treks_count
+    )
+
+
+@controllers.route('/staff/profile/update', methods=['POST'])
+def staff_profile_update():
+    if session.get('role') != 'Trek Staff':
+        return redirect(url_for('controllers.login'))
+    user_id = session.get('user_id')
+    profile = StaffProfile.query.filter_by(user_id=user_id).first()
+    if profile:
+        profile.name = request.form.get('name', profile.name)
+        profile.contact_details = request.form.get('contact_details', profile.contact_details)
+        db.session.commit()
+        flash('Profile updated.')
+    return redirect(url_for('controllers.staff_dashboard'))
+
+
+@controllers.route('/staff/trek/manage/<int:trek_id>')
+def staff_trek_manage(trek_id):
+    if session.get('role') != 'Trek Staff':
+        return redirect(url_for('controllers.login'))
+    user_id = session.get('user_id')
+    trek = Trek.query.get_or_404(trek_id)
+    if trek.assigned_staff_id != user_id:
+        return 'Unauthorized: this trek is not assigned to you', 403
+
+    bookings = Booking.query.filter_by(trek_id=trek_id).all()
+    participants = []
+    for booking in bookings:
+        user = User.query.get(booking.user_id)
+        if user:
+            participants.append({'user': user, 'booking': booking})
+
+    return render_template('staff_manage_trek.html', trek=trek, participants=participants)
+
+
+@controllers.route('/staff/trek/update-status/<int:trek_id>', methods=['POST'])
+def staff_trek_update_status(trek_id):
+    if session.get('role') != 'Trek Staff':
+        return redirect(url_for('controllers.login'))
+    user_id = session.get('user_id')
+    trek = Trek.query.get_or_404(trek_id)
+    if trek.assigned_staff_id != user_id:
+        return 'Unauthorized: this trek is not assigned to you', 403
+
+    trek.status = request.form.get('status', trek.status)
+    trek.available_slots = request.form.get('available_slots', type=int, default=trek.available_slots)
+    db.session.commit()
+    flash('Trek updated.')
+    return redirect(url_for('controllers.staff_trek_manage', trek_id=trek_id))
 
 
 @controllers.route('/trekker/dashboard')

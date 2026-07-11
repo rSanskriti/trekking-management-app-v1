@@ -6,6 +6,7 @@ class User(db.Model):
     username = db.Column(db.String(80), nullable=False, unique=True)
     password = db.Column(db.String(200), nullable=False)
     role = db.Column(db.String(50), nullable=False)
+    contact_details = db.Column(db.String(200), nullable=True)
 
     staff_profile = db.relationship('StaffProfile', backref='user', uselist=False)
     treks = db.relationship('Trek', backref='assigned_staff', foreign_keys='Trek.assigned_staff_id')
