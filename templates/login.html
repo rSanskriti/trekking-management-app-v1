@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<!-- Font Awesome CDN Icons ke liye (Trekker & Staff symbols) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    /* Main Background Wrapper with Gradient */
+    .trek-wrapper {
+        min-height: 85vh;
+        background: linear-gradient(135deg, #be7360 0%, #703c34 100%);
+        position: relative;
+        overflow: hidden;
+        border-radius: 16px;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        padding: 40px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* --- CREATIVE TREKKING ELEMENTS (PURE CSS MOUNTAINS) --- */
+    /* Pichhe ka bada pahad */
+    .trek-wrapper::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 450px solid transparent;
+        border-right: 450px solid transparent;
+        border-bottom: 320px solid rgba(85, 126, 77, 0.35); /* Soft Green Mountain Tint */
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    /* Aage ka chhota pahad */
+    .trek-wrapper::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 35%;
+        width: 0;
+        height: 0;
+        border-left: 300px solid transparent;
+        border-right: 300px solid transparent;
+        border-bottom: 220px solid rgba(66, 102, 60, 0.45);
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    /* Dynamic Floating Hiker Icon (Left Side) */
+    .hiker-badge {
+        position: absolute;
+        left: 8%;
+        bottom: 12%;
+        z-index: 2;
+        color: rgba(255, 255, 255, 0.85);
+        text-align: center;
+    }
+    .hiker-badge i {
+        font-size: 4.5rem;
+        display: block;
+        margin-bottom: 8px;
+        text-shadow: 2px 4px 10px rgba(0,0,0,0.3);
+    }
+    .hiker-badge span {
+        font-weight: 600;
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+    }
+
+    /* Dynamic Floating Staff Icon (Right Side) */
+    .staff-badge {
+        position: absolute;
+        right: 8%;
+        bottom: 12%;
+        z-index: 2;
+        color: rgba(255, 255, 255, 0.85);
+        text-align: center;
+    }
+    .staff-badge i {
+        font-size: 4.5rem;
+        display: block;
+        margin-bottom: 8px;
+        text-shadow: 2px 4px 10px rgba(0,0,0,0.3);
+    }
+    .staff-badge span {
+        font-weight: 600;
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+    }
+
+    /* --- LOGIN CARD CONTENT STYLES --- */
+    .login-box {
+        position: relative;
+        z-index: 3; /* Mountains ke upar dikhne ke liye */
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+    }
+
+    .main-title {
+        color: #ffffff;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .sub-title {
+        color: #f3e5e2;
+        font-size: 1.05rem;
+        margin-bottom: 35px;
+        font-weight: 400;
+    }
+
+    /* Central Profile Icon Wrapper */
+    .avatar-wrapper {
+        width: 85px;
+        height: 85px;
+        background-color: #464646;
+        border: 3px solid #2e2e2e;
+        border-radius: 50%;
+        margin: 0 auto 25px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .avatar-wrapper i {
+        font-size: 2.5rem;
+        color: #b3b3b3;
+    }
+
+    /* Custom Input Fields */
+    .custom-input {
+        background: transparent !important;
+        border: 2px solid #5a6b5d !important;
+        border-radius: 50px !important;
+        color: #ffffff !important;
+        padding: 12px 20px !important;
+        text-align: center;
+        font-size: 1.05rem;
+        transition: all 0.3s ease;
+    }
+    .custom-input::placeholder {
+        color: rgba(255, 255, 255, 0.85) !important;
+    }
+    .custom-input:focus {
+        border-color: #2ea82e !important;
+        box-shadow: 0 0 8px rgba(46, 168, 46, 0.4) !important;
+    }
+
+    /* Pill Buttons (Login & Register) */
+    .btn-trek-green {
+        background-color: #24a924 !important;
+        border: none !important;
+        border-radius: 50px !important;
+        color: #ffffff !important;
+        padding: 12px !important;
+        font-size: 1.15rem;
+        font-weight: 600;
+        transition: background-color 0.2s ease !important;
+    }
+    .btn-trek-green:hover {
+        background-color: #1c871c !important;
+    }
+
+    .btn-trek-register {
+        display: inline-block;
+        background-color: #24a924;
+        color: #ffffff;
+        border-radius: 50px;
+        padding: 10px 30px;
+        margin-top: 20px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background-color 0.2s ease;
+    }
+    .btn-trek-register:hover {
+        background-color: #1c871c;
+        color: #ffffff;
+    }
+
+    /* Responsive adjustments for smaller screens */
+    @media (max-width: 768px) {
+        .hiker-badge, .staff-badge {
+            position: static;
+            display: inline-block;
+            margin: 15px 20px;
+        }
+        .trek-wrapper {
+            flex-direction: column;
+        }
+        .trek-wrapper::before, .trek-wrapper::after {
+            display: none; /* Mobile par clean look ke liye graphics hide kiye hain */
+        }
+    }
+</style>
+
+<div class="trek-wrapper shadow-lg">
+    
+    <!-- Left Side Element: Trekker -->
+    <div class="hiker-badge">
+        <i class="fa-solid fa-person-hiking"></i>
+        <span>Trekker</span>
+    </div>
+
+    <!-- Center Module: Login Card -->
+    <div class="login-box">
+        <h1 class="main-title">Trekking Management</h1>
+        <p class="sub-title">Trekkers and trekkers Staff Join this</p>
+
+        <form method="post" class="mt-2">
+            <!-- User Avatar Style Shape -->
+            <div class="avatar-wrapper">
+                <i class="fa-solid fa-user"></i>
+            </div>
+
+            <!-- Username Input Field -->
+            <div class="mb-3">
+                <input type="text" 
+                       class="form-control custom-input" 
+                       id="username" 
+                       name="username" 
+                       placeholder="Username" 
+                       required>
+            </div>
+
+            <!-- Password Input Field -->
+            <div class="mb-4">
+                <input type="password" 
+                       class="form-control custom-input" 
+                       id="password" 
+                       name="password" 
+                       placeholder="Password" 
+                       required>
+            </div>
+
+            <!-- Login Execution Action -->
+            <button type="submit" class="btn btn-trek-green w-100 shadow-sm">Login</button>
+
+            <!-- Registration Redirection Navigation -->
+            <div>
+                <a href="{{ url_for('controllers.register') }}" class="btn-trek-register shadow-sm">Create an account</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Right Side Element: Trekker Staff -->
+    <div class="staff-badge">
+        <i class="fa-solid fa-user-tie"></i>
+        <span>Trekker Staff</span>
+    </div>
+
+</div>
+{% endblock %}

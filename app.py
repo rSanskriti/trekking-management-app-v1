@@ -1,9 +1,10 @@
-from flask import Flask
+from flask import Flask, session
 from application.database import db
 from application.models import User
 from application.controllers import controllers
 
 app = Flask(__name__)
+app.secret_key = 'secretkey'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///trekking.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

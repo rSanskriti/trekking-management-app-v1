@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}Add Trek Staff{% endblock %}
+
+{% block content %}
+<style>
+    .staff-form-card {
+        max-width: 640px;
+        margin: 0 auto;
+        border: none;
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .staff-form-card .card-body {
+        position: relative;
+    }
+
+    .staff-form-card::before {
+        content: "";
+        display: block;
+        height: 6px;
+        background: linear-gradient(90deg, #198754, #20c997);
+    }
+
+    .staff-form-title {
+        font-weight: 600;
+        color: #2c3e50;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .staff-form-title::before {
+        content: "";
+        width: 8px;
+        height: 28px;
+        background-color: #198754;
+        border-radius: 4px;
+        display: inline-block;
+    }
+
+    .staff-form .form-label {
+        font-weight: 500;
+        color: #495057;
+        font-size: 0.92rem;
+    }
+
+    .staff-form .form-control {
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+        padding: 0.55rem 0.8rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .staff-form .form-control:focus {
+        border-color: #20c997;
+        box-shadow: 0 0 0 0.2rem rgba(32, 201, 151, 0.2);
+    }
+
+    .staff-note {
+        background-color: #f1f9f4;
+        border: 1px solid #d1e7dd;
+        border-radius: 8px;
+        padding: 0.6rem 0.9rem;
+        color: #0f5132 !important;
+    }
+
+    .staff-form .btn {
+        border-radius: 8px;
+        font-weight: 500;
+        padding: 0.5rem 1.4rem;
+    }
+
+    .staff-form .btn-primary {
+        background-color: #198754;
+        border-color: #198754;
+    }
+
+    .staff-form .btn-primary:hover {
+        background-color: #157347;
+        border-color: #146c43;
+    }
+</style>
+
+<div class="card shadow-sm staff-form-card">
+    <div class="card-body p-4">
+        <h1 class="h4 mb-4 staff-form-title">Add Trek Staff</h1>
+        <form method="post" action="{{ url_for('controllers.admin_staff_add') }}" class="staff-form">
+            <div class="mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required minlength="6">
+            </div>
+            <div class="mb-3">
+                <label for="contact_details" class="form-label">Contact Details</label>
+                <input type="text" class="form-control" id="contact_details" name="contact_details">
+            </div>
+            <p class="small mb-3 staff-note">Staff added directly by the admin are approved automatically.</p>
+            <div class="d-flex flex-column flex-sm-row justify-content-end gap-2 mt-3">
+                <a href="{{ url_for('controllers.admin_staff') }}" class="btn btn-outline-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
