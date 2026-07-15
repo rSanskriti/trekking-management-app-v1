@@ -1,6 +1,0 @@
-__pycache__/
-*.pyc
-trekking.db
-venv/
-.env
-.vscode/
