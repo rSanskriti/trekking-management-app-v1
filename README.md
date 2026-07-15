@@ -13,7 +13,7 @@ Built as part of the Modern Application Development I (App Dev I) course project
 - **Flask** — backend web framework
 - **Flask-SQLAlchemy** — ORM over a SQLite database
 - **Jinja2** — server-side templating
-- **HTML/CSS and Bootstrap 5** - frontend styling, responsive layout, badges, tables and cards.
+- **HTML/CSS and Bootstrap 5** - frontend styling, responsive layout, badges, tables and cards
 
 ## Project Structure
 
