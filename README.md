@@ -104,4 +104,4 @@ python init_db.py
   `before_request` guard restricting `/admin`, `/staff` and `/trekker` routes
   by role.
 - The AI/LLM usage declaration and demo video link are included in the
-  project report (`App_Dev_Project_Report.docx` / PDF).
+  project report - `tma_project_report .pdf`.
